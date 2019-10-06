@@ -1,8 +1,13 @@
 buildscript {
     repositories {
+        mavenLocal()
         maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
         mavenCentral()
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
@@ -10,8 +15,37 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+
+repositories {
+    mavenLocal()
+    maven {
+        name 'ForgeFS'
+        url 'https://files.minecraftforge.net/maven'
+    }
+    maven {
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
+    maven { // TOP
+        name 'tterrag maven'
+        url "https://maven.tterrag.com/"
+    }
+    maven { // compatlayer
+        name 'K-4u maven'
+        url "https://maven.k-4u.nl/"
+    }
+    maven {
+        name "Tehnut Maven FS"
+        url "https://tehnut.info/maven"
+    }
+    maven {
+        name = "CoFH Maven"
+        url = "https://maven.covers1624.net"
+    }
+}
 
 version = "${minecraft_version}-${mod_version}"
 group = 'com.staticph.brewersboon' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -43,9 +77,12 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                brewersboon {
+                mantle{
                     source sourceSets.main
                 }
+//                brewersboon {
+//                    source sourceSets.main
+//                }
             }
         }
 
@@ -59,9 +96,12 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                brewersboon {
+                mantle{
                     source sourceSets.main
                 }
+//                brewersboon {
+//                    source sourceSets.main
+//                }
             }
         }
 
@@ -110,6 +150,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+    compile fg.deobf("slimeknights.mantle:Mantle:${minecraft_version}-${mantle_version}")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

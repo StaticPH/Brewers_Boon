@@ -10,7 +10,6 @@ import net.minecraftforge.registries.ObjectHolder;
 
 import org.apache.logging.log4j.Logger;
 
-//import com.slimeknights.Mantle;
 import com.staticph.brewersboon.CreativeTab;
 import com.staticph.brewersboon.Util;
 import com.staticph.brewersboon.items.dummyItem;
