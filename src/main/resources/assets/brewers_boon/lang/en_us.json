@@ -1,0 +1,10 @@
+{
+  "_comment": "Items",
+  "item.brewersboon.dummy_item": "Dummy Item",
+
+  "_comment": "Blocks",
+  "block.brewersboon.dummy_block": "Dummy Block",
+
+  "_comment": "Creative Tab Names",
+  "itemGroup.brewersboon": "Brewer's Boon"
+}
