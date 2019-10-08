@@ -4,32 +4,27 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ObjectHolder;
 
 import org.apache.logging.log4j.Logger;
 
-import com.staticph.brewersboon.CreativeTab;
+import slimeknights.mantle.client.CreativeTab;
+import slimeknights.mantle.common.IRegisterUtil;
+
 import com.staticph.brewersboon.Util;
 import com.staticph.brewersboon.items.dummyItem;
 
 @ObjectHolder(Util.MOD_ID)
-public class RegistryHandler implements IRegisterUtil{
+public class RegistryHandler implements IRegisterUtil {
     static final Logger log = Util.getLogger("RegistryHandler");
 
     public static final dummyItem dummy_item = null;
 
     @Override
     public String getModId(){ return Util.MOD_ID;}
-
-//    public static ItemGroup buildCreativeTab(ItemStack itemStack){
-//
-//    }
-//    public static ItemGroup modCreativeTab = new ItemGroup(Util.MOD_ID) {
-//        @Override
-//        public ItemStack createIcon () { return new ItemStack(dummy_item);}
-//    };
 
     public static CreativeTab modCreativeTab = new CreativeTab("brewersboon", new ItemStack(dummy_item));
 
@@ -45,7 +40,6 @@ https://github.com/Direwolf20-MC/BuildingGadgets/tree/master/src/main/java/com/d
     public static void setup(){
 
     }
-//   https://github.com/SlimeKnights/Mantle/blob/1.14/src/main/java/slimeknights/mantle/common/IRegisterUtil.java
 
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -62,5 +56,10 @@ https://github.com/Direwolf20-MC/BuildingGadgets/tree/master/src/main/java/com/d
             some item that can be en/disabled in the config
         }*/
         register(registry, new dummyItem(modCreativeTab), "dummy_item");
+    }
+
+    @SubscribeEvent
+    public void postInit(final InterModProcessEvent event) {
+        modCreativeTab.setDisplayIcon(new ItemStack(dummy_item));
     }
 }

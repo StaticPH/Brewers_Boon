@@ -1,57 +1,36 @@
 buildscript {
     repositories {
-        mavenLocal()
         maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
         mavenCentral()
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+plugins {
+    id "com.wynprice.cursemaven" version "1.1.0"
+}
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'maven'
-apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-repositories {
-    mavenLocal()
-    maven {
-        name 'ForgeFS'
-        url 'https://files.minecraftforge.net/maven'
-    }
-    maven {
-        name 'DVS1 Maven FS'
-        url 'https://dvs1.progwml6.com/files/maven'
-    }
-    maven { // TOP
-        name 'tterrag maven'
-        url "https://maven.tterrag.com/"
-    }
-    maven { // compatlayer
-        name 'K-4u maven'
-        url "https://maven.k-4u.nl/"
-    }
-    maven {
-        name "Tehnut Maven FS"
-        url "https://tehnut.info/maven"
-    }
-    maven {
-        name = "CoFH Maven"
-        url = "https://maven.covers1624.net"
-    }
-}
-
-version = "${minecraft_version}-${mod_version}"
 group = 'com.staticph.brewersboon' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'BrewersBoon'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+//configurations {
+//    deployerJars
+//}
+
+version = "${minecraft_version}-${mod_version}"
+/** If on a build server, append the build number to the version string **/
+if (System.getenv().BUILD_NUMBER != null) {
+    version += ".${System.getenv().BUILD_NUMBER}"
+}
+
+/** Need this here so eclipse task generates correctly. **/
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
@@ -77,12 +56,9 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                mantle{
+                brewersboon {
                     source sourceSets.main
                 }
-//                brewersboon {
-//                    source sourceSets.main
-//                }
             }
         }
 
@@ -96,12 +72,9 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                mantle{
+                brewersboon {
                     source sourceSets.main
                 }
-//                brewersboon {
-//                    source sourceSets.main
-//                }
             }
         }
 
@@ -125,12 +98,29 @@ minecraft {
     }
 }
 
+repositories {
+    maven { // Mantle and JEI
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
+//    maven { // TOP
+//        name 'tterrag maven'
+//        url "https://maven.tterrag.com/"
+//    }
+//    maven { // WAILA
+//        name "Tehnut Maven FS"
+//        url "https://tehnut.info/maven"
+//    }
+//    maven { // LLibrary
+//        url = "http://maven.mcmoddev.com"
+//    }
+}
+
 dependencies {
     // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-//    minecraft 'net.minecraftforge:forge:1.14.4-28.1.10'
-    minecraft 'net.minecraftforge:forge:' + minecraft_version +'-' + forge_version
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -150,7 +140,13 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
+    /** Compile against the JEI API but do not include it at runtime **/
+//    compileOnly fg.deobf("mezz.jei:jei-${config.minecraft_version}:${config.jei_version}:api")
+    /** At runtime, use the full JEI jar **/
+//    runtimeOnly fg.deobf("mezz.jei:jei-${config.minecraft_version}:${config.jei_version}")
+
     compile fg.deobf("slimeknights.mantle:Mantle:${minecraft_version}-${mantle_version}")
+    //deobfCompile "mcp.mobius.waila:Hwyla:${config.hwyla_version}"
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
@@ -168,24 +164,43 @@ jar {
     }
 }
 
+// Because the normal output has been made to be obfuscated
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
+
 // Example configuration to allow publishing using the maven-publish task
 // we define a custom artifact that is sourced from the reobfJar output task
 // and then declare that to be published
 // Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
+/*def reobfFile = file("$buildDir/reobfJar/output.jar")
 def reobfArtifact = artifacts.add('default', reobfFile) {
     type 'jar'
     builtBy 'reobfJar'
-}
+}*/
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact jar
+            artifact sourcesJar
         }
     }
     repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+        if (project.hasProperty('DEPLOY_DIR')){
+            System.out.println("Found DEPLOY_DIR = " + DEPLOY_DIR)
+            maven { url DEPLOY_DIR }
+        }
+        else{
+            System.out.println("Project lacks property 'DEPLOY_DIR'. " +
+                    "Falling back to '${project.projectDir}/mcmodsrepo'")
+            maven {
+                url "file:///${project.projectDir}/mcmodsrepo"
+            }
         }
     }
 }
