@@ -1,10 +1,8 @@
 package com.staticph.brewersboon;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
@@ -14,6 +12,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import slimeknights.mantle.util.BlankBlockDropJsonGenerator;
+import slimeknights.mantle.util.BlockStateJsonGenerator;
+import slimeknights.mantle.util.LanguageJsonGenerator;
+import slimeknights.mantle.util.ModelJsonGenerator;
+
 import java.util.stream.Collectors;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -88,39 +91,15 @@ public class BrewersBoon {
 
         if (event.includeServer()) {
 //            datagenerator.addProvider(new)
+
+            // noinspection ConstantConditions
+            if (true) {
+                datagenerator.addProvider(new BlockStateJsonGenerator(datagenerator, Util.MOD_ID));
+                datagenerator.addProvider(new ModelJsonGenerator(datagenerator, Util.MOD_ID));
+                datagenerator.addProvider(new LanguageJsonGenerator(datagenerator, Util.MOD_ID));
+                datagenerator.addProvider(new BlankBlockDropJsonGenerator(datagenerator, Util.MOD_ID));
+            }
         }
 
     }
 }
-/*
-https://github.com/Direwolf20-MC/BuildingGadgets/blob/master/src/main/java/com/direwolf20/buildinggadgets/common/registry/OurContainers.java
-https://github.com/Direwolf20-MC/BuildingGadgets/blob/master/src/main/java/com/direwolf20/buildinggadgets/common/registry/OurItems.java
-https://github.com/Direwolf20-MC/BuildingGadgets/tree/master/src/main/java/com/direwolf20/buildinggadgets/common/util/blocks
-https://github.com/Direwolf20-MC/BuildingGadgets/blob/master/src/main/java/com/direwolf20/buildinggadgets/common/util/helpers/InventoryHelper.java
-https://github.com/Mrbysco/StructureCompass/blob/1.14/src/main/java/com/mrbysco/structurecompass/StructureCompass.java
-
-
-
-mc.src.net/minecraftforge/event/brewing/PotionBrewEvent.java
-mc.src.net/minecraftforge/event/ForgeEventFactory.java
-mc.src.net/minecraftforge/event/world/BlockEvent.java
-mc.src.net/minecraftforge/event/world/GetCollisionBoxesEvent.java
-mc.src.net/minecraftforge/event/entity/player/PlayerInteractEvent.java
-mc.src.net/minecraftforge/event/entity/player/PlayerEvent.java:380  and/or  mc.src.net/minecraftforge/event/entity/player/EntityItemPickupEvent.java    item pickup event
-
-mc.src.net/minecraftforge/common/brewing/VanillaBrewingRecipe.java
-mc.src.net/minecraftforge/common/brewing/IBrewingRecipe.java
-mc.src.net/minecraftforge/common/brewing/BrewingRecipeRegistry.java
-mc.src.net/minecraftforge/common/brewing/BrewingRecipe.java
-
-
-mc.src.net/minecraftforge/event/entity/living/PotionEvent.java
-mc.src.net/minecraftforge/common/extensions/IForgeEffectInstance.java
-
-mc.src.net/minecraftforge/common/extensions/IForgeEffect.java
-mc.src.net/minecraftforge/event/furnace/FurnaceFuelBurnTimeEvent.java
-mc.src.net/minecraftforge/event/entity/living/PotionColorCalculationEvent.java: 59 & 64 particles
-
-mc.src.net/minecraftforge/common/crafting/CompoundIngredient.java   no idea what this does
-
- */
