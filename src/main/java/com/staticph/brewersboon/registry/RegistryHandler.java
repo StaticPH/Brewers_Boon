@@ -28,14 +28,6 @@ public class RegistryHandler implements IRegisterUtil {
 
     public static CreativeTab modCreativeTab = new CreativeTab("brewersboon", new ItemStack(dummy_item));
 
-/*
-https://github.com/Direwolf20-MC/BuildingGadgets/blob/master/src/main/java/com/direwolf20/buildinggadgets/common/registry/OurItems.java#L99
-https://github.com/Direwolf20-MC/BuildingGadgets/search?q=creativetab&unscoped_q=creativetab
-https://github.com/Direwolf20-MC/BuildingGadgets/blob/master/src/main/java/com/direwolf20/buildinggadgets/common/registry/RegistryHandler.java
-https://github.com/Direwolf20-MC/BuildingGadgets/blob/master/src/main/java/com/direwolf20/buildinggadgets/common/util/ref/Reference.java
-https://github.com/Direwolf20-MC/BuildingGadgets/tree/master/src/main/java/com/direwolf20/buildinggadgets/common/util/lang
-
- */
 
     public static void setup(){
 
