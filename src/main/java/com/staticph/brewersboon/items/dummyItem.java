@@ -9,6 +9,7 @@ public class dummyItem extends GeneratedItem {
 
     public dummyItem(ItemGroup itemGroup){
         super(itemGroup);
+//        this.setRegistryName("dummy_item");
     }
 
     @SuppressWarnings("NullableProblems")

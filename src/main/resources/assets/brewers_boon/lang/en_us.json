@@ -1,6 +1,7 @@
 {
   "_comment": "Items",
   "item.brewersboon.dummy_item": "Dummy Item",
+  "item.brewersboon.entity_stick": "Entity Stick",
 
   "_comment": "Blocks",
   "block.brewersboon.dummy_block": "Dummy Block",

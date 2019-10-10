@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+	"layer0": "brewers_boon:item/dummy_item"
+  }
+}

@@ -1,5 +1,6 @@
 package com.staticph.brewersboon.registry;
 
+import com.staticph.brewersboon.items.entityStick;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,16 +23,13 @@ public class RegistryHandler implements IRegisterUtil {
     static final Logger log = Util.getLogger("RegistryHandler");
 
     public static final dummyItem dummy_item = null;
+    public static final entityStick entity_stick = null;
 
     @Override
     public String getModId(){ return Util.MOD_ID;}
 
     public static CreativeTab modCreativeTab = new CreativeTab("brewersboon", new ItemStack(dummy_item));
 
-
-    public static void setup(){
-
-    }
 
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -48,6 +46,7 @@ public class RegistryHandler implements IRegisterUtil {
             some item that can be en/disabled in the config
         }*/
         register(registry, new dummyItem(modCreativeTab), "dummy_item");
+        register(registry, new entityStick(modCreativeTab), "entity_stick");
     }
 
     @SubscribeEvent

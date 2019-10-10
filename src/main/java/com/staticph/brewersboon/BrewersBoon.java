@@ -1,5 +1,6 @@
 package com.staticph.brewersboon;
 
+import com.staticph.brewersboon.registry.RegistryHandler;
 import net.minecraft.block.Blocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,6 +39,7 @@ public class BrewersBoon {
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+        FMLJavaModLoadingContext.get().getModEventBus().register(new RegistryHandler());
     }
 
     private void setup (final FMLCommonSetupEvent event) {
